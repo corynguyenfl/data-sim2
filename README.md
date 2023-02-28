@@ -46,13 +46,13 @@ load-bank:
 ## Build
 
 ```
-cargo build
+go build
 ```
 
 ### Run
 
 ```
-APP_CONF=config/app.yaml cargo run
+APP_CONF=config/app.yaml go run .
 ```
 
 ## Docker
