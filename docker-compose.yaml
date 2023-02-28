@@ -1,0 +1,14 @@
+version: '3.4'
+
+services:
+  data-sim:    
+    image: data-sim2
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: data-sim
+    volumes:
+      - .:/data-sim      
+    environment:
+      - RUST_LOG=debug
+      - APP_CONF=/data-sim/config/app.yaml
