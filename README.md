@@ -1,6 +1,6 @@
 # Data Simulator
 
-A simple program that published OpenFMB messages
+A simple program that publishes OpenFMB messages
 
 ## Configuration
 
@@ -30,7 +30,7 @@ solar:
   w: 774.93
 generator:
   mrid: 8e202725-5a8d-45c2-b575-8161927c6770        
-  name: Generator
+  reading_mrid: 8e202725-5a8d-45c2-b575-8161927c6770
   is_on: false
   w: 123.3
 shop-meter:
@@ -52,7 +52,7 @@ cargo build
 ### Run
 
 ```
-RUST_LOG=debug APP_CONF=config/app.yaml cargo run
+APP_CONF=config/app.yaml cargo run
 ```
 
 ## Docker
