@@ -1,6 +1,7 @@
 package microgrid
 
 import (
+	"sync"
 	"time"
 
 	"github.com/nats-io/nats.go"
@@ -8,9 +9,10 @@ import (
 )
 
 type Microgrid struct {
+	m sync.Mutex
 }
 
-func (m Microgrid) Start() {
+func (m *Microgrid) Start() {
 
 	appconfig, _ := utils.ReadAppConfig("config/app.yaml")
 

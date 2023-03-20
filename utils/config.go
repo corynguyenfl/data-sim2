@@ -16,6 +16,7 @@ type AppConfig struct {
 	}
 	MicrogridConfiguration MicrogridConfiguration `yaml:"microgrid-controller"`
 	CvrConfiguration       CvrConfiguration       `yaml:"cvr"`
+	file                   string
 }
 
 type MicrogridConfiguration struct {
@@ -58,118 +59,83 @@ type MicrogridConfiguration struct {
 }
 
 type CvrConfiguration struct {
-	Enabled   bool `yaml:"enabled"`
-	Recloser1 struct {
-		MRID     string `yaml:"mrid"`
-		W        float64
-		IsClosed bool `yaml:"is_closed"`
-	} `yaml:"recloser1"`
-	Recloser2 struct {
-		MRID     string `yaml:"mrid"`
-		W        float64
-		IsClosed bool `yaml:"is_closed"`
-	} `yaml:"recloser2"`
-	VR1 struct {
-		MRID                   string  `yaml:"mrid"`
-		Pos                    int32   `yaml:"pos"`
-		VolLmHi                bool    `yaml:"volLmHi"`
-		VolLmLo                bool    `yaml:"volLmLo"`
-		VoltageSetPointEnabled bool    `yaml:"voltageSetPointEnabled"`
-		SourcePrimaryVolage    float64 `yaml:"source_primary_voltage"`
-		SourceSecondaryVolage  float64 `yaml:"source_secondary_voltage"`
-		LoadPrimaryVolage      float64 `yaml:"load_primary_voltage"`
-		LoadSecondaryVolage    float64 `yaml:"load_secondary_voltage"`
-	} `yaml:"vr1"`
-	VR2 struct {
-		MRID                   string  `yaml:"mrid"`
-		Pos                    int32   `yaml:"pos"`
-		VolLmHi                bool    `yaml:"volLmHi"`
-		VolLmLo                bool    `yaml:"volLmLo"`
-		VoltageSetPointEnabled bool    `yaml:"voltageSetPointEnabled"`
-		SourcePrimaryVolage    float64 `yaml:"source_primary_voltage"`
-		SourceSecondaryVolage  float64 `yaml:"source_secondary_voltage"`
-		LoadPrimaryVolage      float64 `yaml:"load_primary_voltage"`
-		LoadSecondaryVolage    float64 `yaml:"load_secondary_voltage"`
-	} `yaml:"vr2"`
-	VR3 struct {
-		MRID                   string  `yaml:"mrid"`
-		Pos                    int32   `yaml:"pos"`
-		VolLmHi                bool    `yaml:"volLmHi"`
-		VolLmLo                bool    `yaml:"volLmLo"`
-		VoltageSetPointEnabled bool    `yaml:"voltageSetPointEnabled"`
-		SourcePrimaryVolage    float64 `yaml:"source_primary_voltage"`
-		SourceSecondaryVolage  float64 `yaml:"source_secondary_voltage"`
-		LoadPrimaryVolage      float64 `yaml:"load_primary_voltage"`
-		LoadSecondaryVolage    float64 `yaml:"load_secondary_voltage"`
-	} `yaml:"vr3"`
-	CapBank struct {
-		MRID     string `yaml:"mrid"`
-		Manual   bool   `yaml:"manual"`
-		IsClosed bool   `yaml:"is_closed"`
-		VolLmt   bool   `yaml:"volLmt"`
-		VarLmt   bool   `yaml:"varLmt"`
-		TempLmt  bool   `yaml:"tempLmt"`
-		Ia       float64
-		Ib       float64
-		Ic       float64
-		Va       float64
-		Vb       float64
-		Vc       float64
-		V2a      float64
-		V2b      float64
-		V2c      float64
-		Wa       float64
-		Wb       float64
-		Wc       float64
-	} `yaml:"capbank"`
-	Load1 struct {
-		MRID     string `yaml:"mrid"`
-		Ia       float64
-		Ib       float64
-		Ic       float64
-		Va       float64
-		Vb       float64
-		Vc       float64
-		Apparent float64
-		Reactive float64
-		W        float64
-	} `yaml:"load1"`
-	Load2 struct {
-		MRID     string `yaml:"mrid"`
-		Ia       float64
-		Ib       float64
-		Ic       float64
-		Va       float64
-		Vb       float64
-		Vc       float64
-		Apparent float64
-		Reactive float64
-		W        float64
-	} `yaml:"load2"`
-	Load3 struct {
-		MRID     string `yaml:"mrid"`
-		Ia       float64
-		Ib       float64
-		Ic       float64
-		Va       float64
-		Vb       float64
-		Vc       float64
-		Apparent float64
-		Reactive float64
-		W        float64
-	} `yaml:"load3"`
-	Load4 struct {
-		MRID     string `yaml:"mrid"`
-		Ia       float64
-		Ib       float64
-		Ic       float64
-		Va       float64
-		Vb       float64
-		Vc       float64
-		Apparent float64
-		Reactive float64
-		W        float64
-	} `yaml:"load4"`
+	Enabled   bool             `yaml:"enabled"`
+	Recloser1 Recloser         `yaml:"recloser1"`
+	Recloser2 Recloser         `yaml:"recloser2"`
+	VR1       VoltageRegulator `yaml:"vr1"`
+	VR2       VoltageRegulator `yaml:"vr2"`
+	VR3       VoltageRegulator `yaml:"vr3"`
+	CapBank   CapBank          `yaml:"capbank"`
+	Load1     Load             `yaml:"load1"`
+	Load2     Load             `yaml:"load2"`
+	Load3     Load             `yaml:"load3"`
+	Load4     Load             `yaml:"load4"`
+}
+
+type VoltageRegulator struct {
+	MRID                   string  `yaml:"mrid"`
+	Pos                    int32   `yaml:"pos"`
+	VolLmHi                bool    `yaml:"volLmHi"`
+	VolLmLo                bool    `yaml:"volLmLo"`
+	VoltageSetPointEnabled bool    `yaml:"voltageSetPointEnabled"`
+	SourcePrimaryVolage    float64 `yaml:"source_primary_voltage"`
+	SourceSecondaryVolage  float64 `yaml:"source_secondary_voltage"`
+	LoadPrimaryVolage      float64 `yaml:"load_primary_voltage"`
+	LoadSecondaryVolage    float64 `yaml:"load_secondary_voltage"`
+}
+
+type Load struct {
+	MRID     string `yaml:"mrid"`
+	Ia       float64
+	Ib       float64
+	Ic       float64
+	Va       float64
+	Vb       float64
+	Vc       float64
+	Apparent float64
+	Reactive float64
+	W        float64
+}
+
+type Recloser struct {
+	MRID     string `yaml:"mrid"`
+	W        float64
+	IsClosed bool `yaml:"is_closed"`
+}
+
+type CapBank struct {
+	MRID     string `yaml:"mrid"`
+	Manual   bool   `yaml:"manual"`
+	IsClosed bool   `yaml:"is_closed"`
+	VolLmt   bool   `yaml:"volLmt"`
+	VarLmt   bool   `yaml:"varLmt"`
+	TempLmt  bool   `yaml:"tempLmt"`
+	Ia       float64
+	Ib       float64
+	Ic       float64
+	Va       float64
+	Vb       float64
+	Vc       float64
+	V2a      float64
+	V2b      float64
+	V2c      float64
+	Wa       float64
+	Wb       float64
+	Wc       float64
+}
+
+func (c *AppConfig) Save() {
+	data, err := yaml.Marshal(c)
+
+	if err != nil {
+		fmt.Println("ERROR:: failed to serialize app config")
+	}
+
+	err = ioutil.WriteFile(c.file, data, 0)
+
+	if err != nil {
+		fmt.Println("ERROR:: failed to write app config")
+	}
 }
 
 func ReadAppConfig(defaultFileName string) (*AppConfig, error) {
@@ -190,7 +156,7 @@ func ReadAppConfig(defaultFileName string) (*AppConfig, error) {
 	if err != nil {
 		return nil, fmt.Errorf("in file %q: %w", filename, err)
 	}
-
+	c.file = filename
 	return c, err
 }
 
