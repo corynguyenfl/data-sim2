@@ -10,5 +10,4 @@ services:
     volumes:
       - .:/data-sim      
     environment:
-      - RUST_LOG=debug
       - APP_CONF=/data-sim/config/app.yaml
