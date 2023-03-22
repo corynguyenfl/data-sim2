@@ -11,9 +11,10 @@ import (
 )
 
 type AppConfig struct {
-	Nats struct {
+	LogMessageEnabled bool `yaml:"log-message-enabled"`
+	Nats              struct {
 		Url string `yaml:"url"`
-	}
+	} `yaml:"nats"`
 	MicrogridConfiguration MicrogridConfiguration `yaml:"microgrid-controller"`
 	CvrConfiguration       CvrConfiguration       `yaml:"cvr"`
 	file                   string
@@ -22,9 +23,9 @@ type AppConfig struct {
 type MicrogridConfiguration struct {
 	Enabled bool `yaml:"enabled"`
 	Pcc     struct {
-		MRID     string `yaml:"mrid"`
-		W        float64
-		IsClosed bool `yaml:"is_closed"`
+		MRID     string  `yaml:"mrid"`
+		W        float64 `yaml:"W"`
+		IsClosed bool    `yaml:"is_closed"`
 	}
 	Ess struct {
 		MRID        string  `yaml:"mrid"`
@@ -32,7 +33,7 @@ type MicrogridConfiguration struct {
 		SOC         float64 `yaml:"soc"`
 		Mode        int     `yaml:"mode"`
 		IsOn        bool    `yaml:"is_on"`
-		W           float64
+		W           float64 `yaml:"W"`
 	}
 	Solar struct {
 		MRID         string `yaml:"mrid"`
@@ -41,20 +42,20 @@ type MicrogridConfiguration struct {
 		W            float64
 	}
 	Generator struct {
-		MRID        string `yaml:"mrid"`
-		ReadingMRID string `yaml:"reading_mrid"`
-		IsOn        bool   `yaml:"is_on"`
-		W           float64
+		MRID        string  `yaml:"mrid"`
+		ReadingMRID string  `yaml:"reading_mrid"`
+		IsOn        bool    `yaml:"is_on"`
+		W           float64 `yaml:"W"`
 	}
 	ShopMeter struct {
-		MRID string `yaml:"mrid"`
-		W    float64
+		MRID string  `yaml:"mrid"`
+		W    float64 `yaml:"W"`
 	} `yaml:"shop-meter"`
 	LoadBank struct {
-		MRID        string `yaml:"mrid"`
-		ReadingMRID string `yaml:"reading_mrid"`
-		IsOn        bool   `yaml:"is_on"`
-		W           float64
+		MRID        string  `yaml:"mrid"`
+		ReadingMRID string  `yaml:"reading_mrid"`
+		IsOn        bool    `yaml:"is_on"`
+		W           float64 `yaml:"W"`
 	} `yaml:"load-bank"`
 }
 
@@ -73,6 +74,7 @@ type CvrConfiguration struct {
 }
 
 type VoltageRegulator struct {
+	Name                   string  `yaml:"name"`
 	MRID                   string  `yaml:"mrid"`
 	Pos                    int32   `yaml:"pos"`
 	VolLmHi                bool    `yaml:"volLmHi"`
@@ -85,43 +87,49 @@ type VoltageRegulator struct {
 }
 
 type Load struct {
-	MRID     string `yaml:"mrid"`
-	Ia       float64
-	Ib       float64
-	Ic       float64
-	Va       float64
-	Vb       float64
-	Vc       float64
-	Apparent float64
-	Reactive float64
-	W        float64
+	Name     string  `yaml:"name"`
+	MRID     string  `yaml:"mrid"`
+	Ia       float64 `yaml:"Ia"`
+	Ib       float64 `yaml:"Ib"`
+	Ic       float64 `yaml:"Ic"`
+	Va       float64 `yaml:"Va"`
+	Vb       float64 `yaml:"Vb"`
+	Vc       float64 `yaml:"Vc"`
+	Apparent float64 `yaml:"Apparent"`
+	Reactive float64 `yaml:"Reactive"`
+	W        float64 `yaml:"W"`
 }
 
 type Recloser struct {
-	MRID     string `yaml:"mrid"`
-	W        float64
-	IsClosed bool `yaml:"is_closed"`
+	Name     string  `yaml:"name"`
+	MRID     string  `yaml:"mrid"`
+	Va       float64 `yaml:"Va"`
+	Vb       float64 `yaml:"Vb"`
+	Vc       float64 `yaml:"Vc"`
+	W        float64 `yaml:"W"`
+	IsClosed bool    `yaml:"is_closed"`
 }
 
 type CapBank struct {
-	MRID     string `yaml:"mrid"`
-	Manual   bool   `yaml:"manual"`
-	IsClosed bool   `yaml:"is_closed"`
-	VolLmt   bool   `yaml:"volLmt"`
-	VarLmt   bool   `yaml:"varLmt"`
-	TempLmt  bool   `yaml:"tempLmt"`
-	Ia       float64
-	Ib       float64
-	Ic       float64
-	Va       float64
-	Vb       float64
-	Vc       float64
-	V2a      float64
-	V2b      float64
-	V2c      float64
-	Wa       float64
-	Wb       float64
-	Wc       float64
+	Name        string  `yaml:"name"`
+	MRID        string  `yaml:"mrid"`
+	ControlMode int32   `yaml:"control-mode"`
+	IsClosed    bool    `yaml:"is_closed"`
+	VolLmt      bool    `yaml:"volLmt"`
+	VarLmt      bool    `yaml:"varLmt"`
+	TempLmt     bool    `yaml:"tempLmt"`
+	Ia          float64 `yaml:"Ia"`
+	Ib          float64 `yaml:"Ib"`
+	Ic          float64 `yaml:"Ic"`
+	Va          float64 `yaml:"Va"`
+	Vb          float64 `yaml:"Vb"`
+	Vc          float64 `yaml:"Vc"`
+	V2a         float64 `yaml:"V2a"`
+	V2b         float64 `yaml:"V2b"`
+	V2c         float64 `yaml:"V2c"`
+	Wa          float64 `yaml:"Wa"`
+	Wb          float64 `yaml:"Wb"`
+	Wc          float64 `yaml:"Wc"`
 }
 
 func (c *AppConfig) Save() {

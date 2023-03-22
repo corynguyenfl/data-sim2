@@ -27,6 +27,8 @@ type Voltage struct {
 	Secondary float64
 }
 
+var LogMessageEnabled bool
+
 func Publish(nc *nats.Conn, mrid string, profile protoreflect.ProtoMessage) {
 	data, _ := proto.Marshal(profile)
 	subject := fmt.Sprintf("%s.%s", getSubjectPrefix(profile), mrid)
@@ -35,7 +37,9 @@ func Publish(nc *nats.Conn, mrid string, profile protoreflect.ProtoMessage) {
 	if result != nil {
 		fmt.Println("There is an error publishing message")
 	} else {
-		fmt.Println(profile)
+		if LogMessageEnabled {
+			fmt.Println(profile)
+		}
 	}
 }
 
@@ -93,7 +97,7 @@ func CreateRecloserStatus(mrid string, pos bool) *reclosermodule.RecloserStatusP
 	}
 }
 
-func CreateRecloserReading(mrid string, wattage float64) *reclosermodule.RecloserReadingProfile {
+func CreateRecloserReading(mrid string, va float64, vb float64, vc float64, w float64) *reclosermodule.RecloserReadingProfile {
 	profile := &reclosermodule.RecloserReadingProfile{
 		ReadingMessageInfo: &commonmodule.ReadingMessageInfo{
 			MessageInfo: &commonmodule.MessageInfo{
@@ -114,10 +118,27 @@ func CreateRecloserReading(mrid string, wattage float64) *reclosermodule.Reclose
 
 	profile.RecloserReading = append(profile.RecloserReading, &reclosermodule.RecloserReading{
 		ReadingMMXU: &commonmodule.ReadingMMXU{
+			PhV: &commonmodule.WYE{
+				PhsA: &commonmodule.CMV{
+					CVal: &commonmodule.Vector{
+						Mag: va,
+					},
+				},
+				PhsB: &commonmodule.CMV{
+					CVal: &commonmodule.Vector{
+						Mag: vb,
+					},
+				},
+				PhsC: &commonmodule.CMV{
+					CVal: &commonmodule.Vector{
+						Mag: vc,
+					},
+				},
+			},
 			W: &commonmodule.WYE{
 				Net: &commonmodule.CMV{
 					CVal: &commonmodule.Vector{
-						Mag: wattage,
+						Mag: w,
 					},
 				},
 			},
@@ -533,7 +554,7 @@ func CreateRegulatorReading(
 
 func CreateCapBankStatus(
 	mrid string,
-	manual bool,
+	controlMode int32,
 	pos bool,
 	volLmt bool,
 	varLmt bool,
@@ -557,7 +578,7 @@ func CreateCapBankStatus(
 		CapBankStatus: &capbankmodule.CapBankStatus{
 			CapBankEventAndStatusYPSH: &capbankmodule.CapBankEventAndStatusYPSH{
 				CtlMode: &commonmodule.Optional_ControlModeKind{
-					Value: getControlModeKind(manual),
+					Value: commonmodule.ControlModeKind(controlMode),
 				},
 				Pos: &commonmodule.PhaseDPS{
 					Phs3: &commonmodule.StatusDPS{

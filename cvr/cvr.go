@@ -10,6 +10,7 @@ import (
 	"github.com/nats-io/nats.go"
 	"github.com/openenergysolutions/data-sim/utils"
 	"gitlab.com/openfmb/psm/ops/protobuf/go-openfmb-ops-protobuf/v2/openfmb/capbankmodule"
+	"gitlab.com/openfmb/psm/ops/protobuf/go-openfmb-ops-protobuf/v2/openfmb/commonmodule"
 	"gitlab.com/openfmb/psm/ops/protobuf/go-openfmb-ops-protobuf/v2/openfmb/reclosermodule"
 	"gitlab.com/openfmb/psm/ops/protobuf/go-openfmb-ops-protobuf/v2/openfmb/regulatormodule"
 )
@@ -44,31 +45,31 @@ func (a *CVR) Start() {
 		config := appconfig.CvrConfiguration
 
 		// Reclosers
-		publishRecloserStatus(nc, config.Recloser1.MRID, config.Recloser1.IsClosed)
-		publishRecloserStatus(nc, config.Recloser2.MRID, config.Recloser1.IsClosed)
-		publishRecloserReading(nc, config.Recloser1.MRID, config.Recloser1.W)
-		publishRecloserReading(nc, config.Recloser2.MRID, config.Recloser2.W)
-
-		publishRegulatorStatus(nc, config.VR1.MRID, config.VR1.Pos, config.VR1.VolLmHi, config.VR1.VolLmLo, config.VR1.VoltageSetPointEnabled)
-		publishRegulatorStatus(nc, config.VR2.MRID, config.VR2.Pos, config.VR2.VolLmHi, config.VR2.VolLmLo, config.VR2.VoltageSetPointEnabled)
-		publishRegulatorStatus(nc, config.VR3.MRID, config.VR3.Pos, config.VR3.VolLmHi, config.VR3.VolLmLo, config.VR3.VoltageSetPointEnabled)
+		go publishRecloserStatus(nc, config.Recloser1.MRID, config.Recloser1.IsClosed)
+		go publishRecloserStatus(nc, config.Recloser2.MRID, config.Recloser1.IsClosed)
+		go publishRecloserReading(nc, config.Recloser1.MRID, config.Recloser1.Va, config.Recloser1.Vb, config.Recloser1.Vc, config.Recloser1.W)
+		go publishRecloserReading(nc, config.Recloser2.MRID, config.Recloser2.Va, config.Recloser2.Vb, config.Recloser2.Vc, config.Recloser2.W)
 
 		// Regulators
-		publishRegulatorReading(nc, config.VR1.MRID,
+		go publishRegulatorStatus(nc, config.VR1.MRID, config.VR1.Pos, config.VR1.VolLmHi, config.VR1.VolLmLo, config.VR1.VoltageSetPointEnabled)
+		go publishRegulatorStatus(nc, config.VR2.MRID, config.VR2.Pos, config.VR2.VolLmHi, config.VR2.VolLmLo, config.VR2.VoltageSetPointEnabled)
+		go publishRegulatorStatus(nc, config.VR3.MRID, config.VR3.Pos, config.VR3.VolLmHi, config.VR3.VolLmLo, config.VR3.VoltageSetPointEnabled)
+
+		go publishRegulatorReading(nc, config.VR1.MRID,
 			&utils.Voltage{Primary: config.VR1.SourcePrimaryVolage, Secondary: config.VR1.SourceSecondaryVolage},
 			&utils.Voltage{Primary: config.VR1.LoadPrimaryVolage, Secondary: config.VR1.LoadSecondaryVolage})
 
-		publishRegulatorReading(nc, config.VR2.MRID,
+		go publishRegulatorReading(nc, config.VR2.MRID,
 			&utils.Voltage{Primary: config.VR2.SourcePrimaryVolage, Secondary: config.VR2.SourceSecondaryVolage},
 			&utils.Voltage{Primary: config.VR2.LoadPrimaryVolage, Secondary: config.VR2.LoadSecondaryVolage})
 
-		publishRegulatorReading(nc, config.VR3.MRID,
+		go publishRegulatorReading(nc, config.VR3.MRID,
 			&utils.Voltage{Primary: config.VR3.SourcePrimaryVolage, Secondary: config.VR3.SourceSecondaryVolage},
 			&utils.Voltage{Primary: config.VR3.LoadPrimaryVolage, Secondary: config.VR3.LoadSecondaryVolage})
 
 		// CapBank
-		publishCapbankStatus(nc, config.CapBank.MRID, config.CapBank.Manual, config.CapBank.IsClosed, config.CapBank.VolLmt, config.CapBank.VarLmt, config.CapBank.TempLmt)
-		publishCapbankReading(
+		go publishCapbankStatus(nc, config.CapBank.MRID, config.CapBank.ControlMode, config.CapBank.IsClosed, config.CapBank.VolLmt, config.CapBank.VarLmt, config.CapBank.TempLmt)
+		go publishCapbankReading(
 			nc,
 			config.CapBank.MRID,
 			config.CapBank.Ia,
@@ -85,6 +86,57 @@ func (a *CVR) Start() {
 			config.CapBank.Wc)
 
 		// Loads
+		go publishLoadReading(
+			nc,
+			config.Load1.MRID,
+			config.Load1.Ia,
+			config.Load1.Ib,
+			config.Load1.Ic,
+			config.Load1.Va,
+			config.Load1.Vb,
+			config.Load1.Vc,
+			config.Load1.Apparent,
+			config.Load1.Reactive,
+			config.Load1.W)
+
+		go publishLoadReading(
+			nc,
+			config.Load2.MRID,
+			config.Load2.Ia,
+			config.Load2.Ib,
+			config.Load2.Ic,
+			config.Load2.Va,
+			config.Load2.Vb,
+			config.Load2.Vc,
+			config.Load2.Apparent,
+			config.Load2.Reactive,
+			config.Load2.W)
+
+		go publishLoadReading(
+			nc,
+			config.Load3.MRID,
+			config.Load3.Ia,
+			config.Load3.Ib,
+			config.Load3.Ic,
+			config.Load3.Va,
+			config.Load3.Vb,
+			config.Load3.Vc,
+			config.Load3.Apparent,
+			config.Load3.Reactive,
+			config.Load3.W)
+
+		go publishLoadReading(
+			nc,
+			config.Load4.MRID,
+			config.Load4.Ia,
+			config.Load4.Ib,
+			config.Load4.Ic,
+			config.Load4.Va,
+			config.Load4.Vb,
+			config.Load4.Vc,
+			config.Load4.Apparent,
+			config.Load4.Reactive,
+			config.Load4.W)
 
 		time.Sleep(1 * time.Second)
 	}
@@ -155,6 +207,7 @@ func (a *CVR) processCapBankControl(m *nats.Msg) (err error) {
 
 		if appconfig.CvrConfiguration.CapBank.MRID == mrid {
 			a.handleCapbankPos(&profile, appconfig)
+			a.handleCapbankRemote(&profile, appconfig)
 		}
 
 		a.m.Unlock()
@@ -171,11 +224,46 @@ func (a *CVR) handleCapbankPos(profile *capbankmodule.CapBankDiscreteControlProf
 		}
 	}()
 
-	pos := profile.CapBankControl.CapBankDiscreteControlYPSH.Control.Pos.Phs3.CtlVal
+	if profile.CapBankControl != nil {
+		if profile.CapBankControl.CapBankDiscreteControlYPSH != nil {
+			if profile.CapBankControl.CapBankDiscreteControlYPSH.Control != nil {
+				if profile.CapBankControl.CapBankDiscreteControlYPSH.Control.Pos != nil {
+					if profile.CapBankControl.CapBankDiscreteControlYPSH.Control.Pos.Phs3 != nil {
+						appconfig.CvrConfiguration.CapBank.IsClosed = profile.CapBankControl.CapBankDiscreteControlYPSH.Control.Pos.Phs3.CtlVal
+						fmt.Println("Updated app config for capbank: IsClosed = ", appconfig.CvrConfiguration.CapBank.IsClosed)
+						appconfig.Save()
+					}
+				}
+			}
+		}
+	}
 
-	appconfig.CvrConfiguration.CapBank.IsClosed = pos
-	fmt.Println("Updated app config for capbank: IsClosed = ", pos)
-	appconfig.Save()
+	return nil
+}
+
+func (a *CVR) handleCapbankRemote(profile *capbankmodule.CapBankDiscreteControlProfile, appconfig *utils.AppConfig) (err error) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("No CtlMode data in profile.")
+			err = r.(error)
+		}
+	}()
+
+	if profile.CapBankControl != nil {
+		if profile.CapBankControl.CapBankDiscreteControlYPSH != nil {
+			if profile.CapBankControl.CapBankDiscreteControlYPSH.Control != nil {
+				if profile.CapBankControl.CapBankDiscreteControlYPSH.Control.CtlModeOvrRd != nil {
+					if profile.CapBankControl.CapBankDiscreteControlYPSH.Control.CtlModeOvrRd.CtlVal {
+						appconfig.CvrConfiguration.CapBank.ControlMode = 4
+					} else {
+						appconfig.CvrConfiguration.CapBank.ControlMode = 1
+					}
+					fmt.Println("Updated app config for capbank: ControlMode = ", appconfig.CvrConfiguration.CapBank.ControlMode)
+					appconfig.Save()
+				}
+			}
+		}
+	}
 
 	return nil
 }
@@ -204,11 +292,14 @@ func (a *CVR) processRegulatorControl(m *nats.Msg) (err error) {
 		appconfig, _ := utils.ReadAppConfig("config/app.yaml")
 
 		if appconfig.CvrConfiguration.VR1.MRID == mrid {
-			a.handleRaiseTap(&profile, appconfig, &appconfig.CvrConfiguration.VR1)
+			a.handleDirMode(&profile, appconfig, &appconfig.CvrConfiguration.VR1)
+			a.handleTapOp(&profile, appconfig, &appconfig.CvrConfiguration.VR1)
 		} else if appconfig.CvrConfiguration.VR2.MRID == mrid {
-			a.handleRaiseTap(&profile, appconfig, &appconfig.CvrConfiguration.VR2)
+			a.handleDirMode(&profile, appconfig, &appconfig.CvrConfiguration.VR2)
+			a.handleTapOp(&profile, appconfig, &appconfig.CvrConfiguration.VR2)
 		} else if appconfig.CvrConfiguration.VR3.MRID == mrid {
-			a.handleRaiseTap(&profile, appconfig, &appconfig.CvrConfiguration.VR3)
+			a.handleDirMode(&profile, appconfig, &appconfig.CvrConfiguration.VR3)
+			a.handleTapOp(&profile, appconfig, &appconfig.CvrConfiguration.VR3)
 		}
 
 		a.m.Unlock()
@@ -217,7 +308,7 @@ func (a *CVR) processRegulatorControl(m *nats.Msg) (err error) {
 	return nil
 }
 
-func (a *CVR) handleRaiseTap(profile *regulatormodule.RegulatorDiscreteControlProfile, appconfig *utils.AppConfig, vr *utils.VoltageRegulator) (err error) {
+func (a *CVR) handleTapOp(profile *regulatormodule.RegulatorDiscreteControlProfile, appconfig *utils.AppConfig, vr *utils.VoltageRegulator) (err error) {
 	defer func() {
 		if r := recover(); r != nil {
 			fmt.Println("No TapOpL or TapOpR data in profile.")
@@ -235,6 +326,8 @@ func (a *CVR) handleRaiseTap(profile *regulatormodule.RegulatorDiscreteControlPr
 					} else {
 						vr.Pos = vr.Pos + 1
 					}
+					fmt.Printf("Updated app config for  %s: Pos = %d\n", vr.Name, vr.Pos)
+					appconfig.Save()
 				}
 			} else if profile.RegulatorDiscreteControl.RegulatorControlATCC.TapOpR != nil {
 				if profile.RegulatorDiscreteControl.RegulatorControlATCC.TapOpR.Phs3 != nil {
@@ -244,12 +337,38 @@ func (a *CVR) handleRaiseTap(profile *regulatormodule.RegulatorDiscreteControlPr
 					} else {
 						vr.Pos = vr.Pos - 1
 					}
+					fmt.Printf("Updated app config for %s: Pos = %d\n", vr.Name, vr.Pos)
+					appconfig.Save()
 				}
 			}
 		}
 	}
-	fmt.Println("Updated app config for VR: Pos = ", vr.Pos)
-	appconfig.Save()
+
+	return nil
+}
+
+func (a *CVR) handleDirMode(profile *regulatormodule.RegulatorDiscreteControlProfile, appconfig *utils.AppConfig, vr *utils.VoltageRegulator) (err error) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("No DirMode data in profile.")
+			err = r.(error)
+		}
+	}()
+
+	if profile.RegulatorDiscreteControl != nil {
+		if profile.RegulatorDiscreteControl.RegulatorControlATCC != nil {
+			if profile.RegulatorDiscreteControl.RegulatorControlATCC.DirMode != nil {
+				mode := profile.RegulatorDiscreteControl.RegulatorControlATCC.DirMode.Value
+				if mode == commonmodule.DirectionModeKind_DirectionModeKind_locked_forward {
+					vr.VoltageSetPointEnabled = true
+				} else {
+					vr.VoltageSetPointEnabled = false
+				}
+				fmt.Printf("Updated app config for %s: VoltageSetPointEnabled = %t\n", vr.Name, vr.VoltageSetPointEnabled)
+				appconfig.Save()
+			}
+		}
+	}
 
 	return nil
 }
@@ -259,8 +378,8 @@ func publishRecloserStatus(nc *nats.Conn, mrid string, pos bool) {
 	utils.Publish(nc, mrid, profile)
 }
 
-func publishRecloserReading(nc *nats.Conn, mrid string, wattage float64) {
-	profile := utils.CreateRecloserReading(mrid, wattage)
+func publishRecloserReading(nc *nats.Conn, mrid string, va float64, vb float64, vc float64, w float64) {
+	profile := utils.CreateRecloserReading(mrid, va, vb, vc, w)
 	utils.Publish(nc, mrid, profile)
 }
 
@@ -277,12 +396,12 @@ func publishRegulatorReading(nc *nats.Conn, mrid string, source *utils.Voltage, 
 func publishCapbankStatus(
 	nc *nats.Conn,
 	mrid string,
-	manual bool,
+	controlMode int32,
 	pos bool,
 	volLmt bool,
 	varLmt bool,
 	tempLmt bool) {
-	profile := utils.CreateCapBankStatus(mrid, manual,
+	profile := utils.CreateCapBankStatus(mrid, controlMode,
 		pos,
 		volLmt,
 		varLmt,

@@ -15,6 +15,8 @@ func main() {
 
 	appConfig, _ := utils.ReadAppConfig("config/app.yaml")
 
+	utils.LogMessageEnabled = appConfig.LogMessageEnabled
+
 	if appConfig.MicrogridConfiguration.Enabled {
 		microgrid := &microgrid.Microgrid{}
 

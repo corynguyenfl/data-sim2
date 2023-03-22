@@ -1,10 +1,11 @@
+log-message-enabled: false
 nats:
     url: nats://192.168.86.39:4222
 microgrid-controller:
     enabled: false
     pcc:
         mrid: e6768784-48ad-40e9-af2a-9676413d4d6a
-        w: 0
+        W: 0
         is_closed: true
     ess:
         mrid: 836a8638-b448-4961-8258-47aa18e05f65
@@ -12,7 +13,7 @@ microgrid-controller:
         soc: 65
         mode: 2000
         is_on: true
-        w: 0
+        W: 0
     solar:
         mrid: 540b292a-e600-4ae4-b077-40b892ae6970
         is_on: true
@@ -21,28 +22,37 @@ microgrid-controller:
         mrid: 8e202725-5a8d-45c2-b575-8161927c6770
         reading_mrid: 8e202725-5a8d-45c2-b575-8161927c6770
         is_on: false
-        w: 0
+        W: 0
     shop-meter:
         mrid: 0648ef71-cb63-4347-921a-9dbf178da687
-        w: 0
+        W: 0
     load-bank:
         mrid: 4cadfaed-4176-453d-9625-e9ae8ad70529
         reading_mrid: 2a09c597-d666-4354-a31a-dfe6da7727a9
         is_on: false
-        w: 0
+        W: 0
 cvr:
     enabled: true
     recloser1:
-        mrid: 9c9ca740-3032-4143-bf53-412e7e699f15
-        w: 0
+        name: recloser1
+        mrid: 90647973-e0cc-40c8-ad3c-b8adf6c7db05
+        Va: 122
+        Vb: 103
+        Vc: 100
+        W: 0
         is_closed: false
     recloser2:
-        mrid: cd2d3c79-74c0-4d8d-a4ed-c710f0ceaf47
-        w: 0
-        is_closed: true
+        name: recloser2
+        mrid: 9fd20ac0-35b7-4b8f-85e1-eaa8e771c6fd
+        Va: 102
+        Vb: 103
+        Vc: 100
+        W: 0
+        is_closed: false
     vr1:
+        name: vr1
         mrid: 82ad21e3-6f86-437b-a360-405ea3dca012
-        pos: 1
+        pos: -5
         volLmHi: false
         volLmLo: false
         voltageSetPointEnabled: true
@@ -51,8 +61,9 @@ cvr:
         load_primary_voltage: 123
         load_secondary_voltage: 123
     vr2:
+        name: vr2
         mrid: 953ef053-c288-463a-a2ce-33c021ae61e9
-        pos: -2
+        pos: -5
         volLmHi: false
         volLmLo: false
         voltageSetPointEnabled: true
@@ -61,8 +72,9 @@ cvr:
         load_primary_voltage: 123
         load_secondary_voltage: 123
     vr3:
+        name: vr3
         mrid: 9be8b771-7cd5-4335-95f8-165d0aff04fc
-        pos: 1
+        pos: 0
         volLmHi: false
         volLmLo: false
         voltageSetPointEnabled: true
@@ -71,65 +83,70 @@ cvr:
         load_primary_voltage: 123
         load_secondary_voltage: 123
     capbank:
+        name: capbank
         mrid: ea6c74bd-2af3-450d-b459-b4bdf22371a3
-        manual: true
+        control-mode: 4
         is_closed: false
         volLmt: false
         varLmt: false
         tempLmt: false
-        ia: 0
-        ib: 0
-        ic: 0
-        va: 0
-        vb: 0
-        vc: 0
-        v2a: 0
-        v2b: 0
-        v2c: 0
-        wa: 0
-        wb: 0
-        wc: 0
+        Ia: 0
+        Ib: 0
+        Ic: 0
+        Va: 100
+        Vb: 100
+        Vc: 100
+        V2a: 0
+        V2b: 0
+        V2c: 0
+        Wa: 0
+        Wb: 0
+        Wc: 0
     load1:
+        name: load1
         mrid: f4be354c-cdde-4050-84de-2ec3c19f6d70
-        ia: 0
-        ib: 0
-        ic: 0
-        va: 0
-        vb: 0
-        vc: 0
-        apparent: 0
-        reactive: 0
-        w: 0
+        Ia: 10
+        Ib: 11
+        Ic: 12
+        Va: 50
+        Vb: 50
+        Vc: 50
+        Apparent: 100
+        Reactive: 100
+        W: 100
     load2:
+        name: load2
         mrid: 5c6a381b-ea49-4c12-84f5-93d5defa3394
-        ia: 0
-        ib: 0
-        ic: 0
-        va: 0
-        vb: 0
-        vc: 0
-        apparent: 0
-        reactive: 0
-        w: 0
+        Ia: 10
+        Ib: 11
+        Ic: 12
+        Va: 50
+        Vb: 50
+        Vc: 50
+        Apparent: 100
+        Reactive: 100
+        W: 100
     load3:
+        name: load3
         mrid: 5c6a381b-ea49-4c12-84f5-93d5defa3394
-        ia: 0
-        ib: 0
-        ic: 0
-        va: 0
-        vb: 0
-        vc: 0
-        apparent: 0
-        reactive: 0
-        w: 0
+        Ia: 10
+        Ib: 11
+        Ic: 12
+        Va: 50
+        Vb: 50
+        Vc: 50
+        Apparent: 100
+        Reactive: 100
+        W: 100
     load4:
+        name: load4
         mrid: 5c6a381b-ea49-4c12-84f5-93d5defa3394
-        ia: 0
-        ib: 0
-        ic: 0
-        va: 0
-        vb: 0
-        vc: 0
-        apparent: 0
-        reactive: 0
-        w: 0
+        Ia: 10
+        Ib: 11
+        Ic: 12
+        Va: 50
+        Vb: 50
+        Vc: 50
+        Apparent: 100
+        Reactive: 100
+        W: 100
