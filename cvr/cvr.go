@@ -46,7 +46,7 @@ func (a *CVR) Start() {
 
 		// Reclosers
 		go publishRecloserStatus(nc, config.Recloser1.MRID, config.Recloser1.IsClosed)
-		go publishRecloserStatus(nc, config.Recloser2.MRID, config.Recloser1.IsClosed)
+		go publishRecloserStatus(nc, config.Recloser2.MRID, config.Recloser2.IsClosed)
 		go publishRecloserReading(nc, config.Recloser1.MRID, config.Recloser1.Va, config.Recloser1.Vb, config.Recloser1.Vc, config.Recloser1.W)
 		go publishRecloserReading(nc, config.Recloser2.MRID, config.Recloser2.Va, config.Recloser2.Vb, config.Recloser2.Vc, config.Recloser2.W)
 

@@ -1,0 +1,13 @@
+.git*
+.cache
+.vscode
+
+LICENSE
+Dockerfile*
+docker-compose*
+.dockerignore
+**/*.md
+**/*.log
+
+data-sim2
+
