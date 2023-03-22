@@ -12,15 +12,15 @@ type Microgrid struct {
 	m sync.Mutex
 }
 
-func (m *Microgrid) Start() {
+func (m *Microgrid) Start(configFile string) {
 
-	appconfig, _ := utils.ReadAppConfig("config/app.yaml")
+	appconfig, _ := utils.ReadAppConfig(configFile)
 
 	nc, _ := nats.Connect(appconfig.Nats.Url)
 
 	for {
 
-		appconfig, _ := utils.ReadAppConfig("config/app.yaml")
+		appconfig, _ := utils.ReadAppConfig(configFile)
 
 		config := appconfig.MicrogridConfiguration
 

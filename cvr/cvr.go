@@ -16,11 +16,13 @@ import (
 )
 
 type CVR struct {
-	m sync.Mutex
+	m          sync.Mutex
+	configFile string
 }
 
-func (a *CVR) Start() {
-	appconfig, _ := utils.ReadAppConfig("config/app.yaml")
+func (a *CVR) Start(configFile string) {
+	a.configFile = configFile
+	appconfig, _ := utils.ReadAppConfig(configFile)
 
 	nc, _ := nats.Connect(appconfig.Nats.Url)
 
@@ -39,7 +41,7 @@ func (a *CVR) Start() {
 	for {
 
 		a.m.Lock()
-		appconfig, _ := utils.ReadAppConfig("config/app.yaml")
+		appconfig, _ := utils.ReadAppConfig(configFile)
 		a.m.Unlock()
 
 		config := appconfig.CvrConfiguration
@@ -165,7 +167,7 @@ func (a *CVR) processRecloserControl(m *nats.Msg) (err error) {
 		pos := profile.RecloserDiscreteControl.RecloserDiscreteControlXCBR.DiscreteControlXCBR.Pos.Phs3.CtlVal
 
 		a.m.Lock()
-		appconfig, _ := utils.ReadAppConfig("config/app.yaml")
+		appconfig, _ := utils.ReadAppConfig(a.configFile)
 
 		config := appconfig.CvrConfiguration
 
@@ -204,7 +206,7 @@ func (a *CVR) processCapBankControl(m *nats.Msg) (err error) {
 		mrid := profile.CapBankSystem.ConductingEquipment.MRID
 
 		a.m.Lock()
-		appconfig, _ := utils.ReadAppConfig("config/app.yaml")
+		appconfig, _ := utils.ReadAppConfig(a.configFile)
 
 		if appconfig.CvrConfiguration.CapBank.MRID == mrid {
 			a.handleCapbankPos(&profile, appconfig)
@@ -290,7 +292,7 @@ func (a *CVR) processRegulatorControl(m *nats.Msg) (err error) {
 		mrid := profile.RegulatorSystem.ConductingEquipment.MRID
 
 		a.m.Lock()
-		appconfig, _ := utils.ReadAppConfig("config/app.yaml")
+		appconfig, _ := utils.ReadAppConfig(a.configFile)
 
 		if appconfig.CvrConfiguration.VR1.MRID == mrid {
 			a.handleDirMode(&profile, appconfig, &appconfig.CvrConfiguration.VR1)

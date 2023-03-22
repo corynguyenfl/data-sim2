@@ -10,4 +10,5 @@ docker-compose*
 **/*.log
 
 data-sim2
+/config
 

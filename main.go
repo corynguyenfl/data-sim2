@@ -13,20 +13,26 @@ import (
 
 func main() {
 
-	appConfig, _ := utils.ReadAppConfig("config/app.yaml")
+	configFile := os.Getenv("APP_CONF")
+
+	if len(configFile) == 0 {
+		configFile = "config/app.yaml"
+	}
+
+	appConfig, _ := utils.ReadAppConfig(configFile)
 
 	utils.LogMessageEnabled = appConfig.LogMessageEnabled
 
 	if appConfig.MicrogridConfiguration.Enabled {
 		microgrid := &microgrid.Microgrid{}
 
-		go microgrid.Start()
+		go microgrid.Start(configFile)
 	}
 
 	if appConfig.CvrConfiguration.Enabled {
 		cvr := &cvr.CVR{}
 
-		go cvr.Start()
+		go cvr.Start(configFile)
 	}
 
 	fmt.Println("Press CTRL-C to exit...")
