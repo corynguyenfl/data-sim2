@@ -6,9 +6,9 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/openenergysolutions/data-sim/cvr"
-	"github.com/openenergysolutions/data-sim/microgrid"
-	"github.com/openenergysolutions/data-sim/utils"
+	"github.com/corynguyenfl/data-sim2/cvr"
+	"github.com/corynguyenfl/data-sim2/microgrid"
+	"github.com/corynguyenfl/data-sim2/utils"
 )
 
 func main() {

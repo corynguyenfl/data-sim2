@@ -4,8 +4,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/corynguyenfl/data-sim2/utils"
 	"github.com/nats-io/nats.go"
-	"github.com/openenergysolutions/data-sim/utils"
 )
 
 type Microgrid struct {

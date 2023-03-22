@@ -1,4 +1,4 @@
-log-message-enabled: false
+log-message-enabled: true
 nats:
     url: nats://192.168.86.39:4222
 microgrid-controller:

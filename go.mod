@@ -1,4 +1,4 @@
-module github.com/openenergysolutions/data-sim
+module github.com/corynguyenfl/data-sim2
 
 go 1.19
 

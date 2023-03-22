@@ -6,9 +6,9 @@ import (
 	"sync"
 	"time"
 
+	"github.com/corynguyenfl/data-sim2/utils"
 	"github.com/golang/protobuf/proto"
 	"github.com/nats-io/nats.go"
-	"github.com/openenergysolutions/data-sim/utils"
 	"gitlab.com/openfmb/psm/ops/protobuf/go-openfmb-ops-protobuf/v2/openfmb/capbankmodule"
 	"gitlab.com/openfmb/psm/ops/protobuf/go-openfmb-ops-protobuf/v2/openfmb/commonmodule"
 	"gitlab.com/openfmb/psm/ops/protobuf/go-openfmb-ops-protobuf/v2/openfmb/reclosermodule"
@@ -161,6 +161,7 @@ func (a *CVR) processRecloserControl(m *nats.Msg) (err error) {
 		return err
 	} else {
 		mrid := profile.Recloser.ConductingEquipment.MRID
+
 		pos := profile.RecloserDiscreteControl.RecloserDiscreteControlXCBR.DiscreteControlXCBR.Pos.Phs3.CtlVal
 
 		a.m.Lock()
