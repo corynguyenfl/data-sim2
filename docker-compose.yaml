@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
   data-sim:    
-    image: data-sim2
+    image: corynguyenfl/data-sim2
     build: 
       context: .
       dockerfile: Dockerfile
