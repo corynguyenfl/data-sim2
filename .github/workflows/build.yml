@@ -2,7 +2,7 @@ name: Go package
 
 on:
   push:
-    branches: ["feature/workflow"]
+    branches: ["main"]
   pull_request:
     branches: ["main"]
 
