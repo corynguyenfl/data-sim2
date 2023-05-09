@@ -1,6 +1,6 @@
 log-message-enabled: false
 nats:
-    url: nats://192.168.86.39:4222
+    url: nats://192.168.86.30:4222
 microgrid-controller:
     enabled: false
     pcc:
@@ -39,8 +39,8 @@ cvr:
         Va: 122
         Vb: 103
         Vc: 100
-        W: 0
-        is_closed: false
+        W: 132.74
+        is_closed: true
     recloser2:
         name: recloser2
         mrid: 9fd20ac0-35b7-4b8f-85e1-eaa8e771c6fd
@@ -48,40 +48,40 @@ cvr:
         Vb: 103
         Vc: 100
         W: 0
-        is_closed: false
+        is_closed: true
     vr1:
         name: vr1
         mrid: 82ad21e3-6f86-437b-a360-405ea3dca012
-        pos: -5
+        pos: 7
         volLmHi: false
         volLmLo: false
         voltageSetPointEnabled: true
-        source_primary_voltage: 123
-        source_secondary_voltage: 123
-        load_primary_voltage: 123
-        load_secondary_voltage: 123
+        source_primary_voltage: 120.5
+        source_secondary_voltage: 120.5
+        load_primary_voltage: 120.5
+        load_secondary_voltage: 120.5
     vr2:
         name: vr2
         mrid: 953ef053-c288-463a-a2ce-33c021ae61e9
-        pos: -5
+        pos: 6
         volLmHi: false
         volLmLo: false
         voltageSetPointEnabled: true
-        source_primary_voltage: 123
-        source_secondary_voltage: 123
-        load_primary_voltage: 123
-        load_secondary_voltage: 123
+        source_primary_voltage: 120.5
+        source_secondary_voltage: 120.5
+        load_primary_voltage: 120.5
+        load_secondary_voltage: 120.5
     vr3:
         name: vr3
         mrid: 9be8b771-7cd5-4335-95f8-165d0aff04fc
-        pos: 0
+        pos: 12
         volLmHi: false
         volLmLo: false
         voltageSetPointEnabled: true
-        source_primary_voltage: 123
-        source_secondary_voltage: 123
-        load_primary_voltage: 123
-        load_secondary_voltage: 123
+        source_primary_voltage: 120.5
+        source_secondary_voltage: 120.5
+        load_primary_voltage: 120.5
+        load_secondary_voltage: 120.5
     capbank:
         name: capbank
         mrid: ea6c74bd-2af3-450d-b459-b4bdf22371a3
@@ -108,12 +108,12 @@ cvr:
         Ia: 10
         Ib: 11
         Ic: 12
-        Va: 50
-        Vb: 50
-        Vc: 50
-        Apparent: 100
-        Reactive: 100
-        W: 100
+        Va: 6.9
+        Vb: 7
+        Vc: 6.85
+        Apparent: 290.5
+        Reactive: 288.6
+        W: 299.5
     load2:
         name: load2
         mrid: 5c6a381b-ea49-4c12-84f5-93d5defa3394
@@ -123,30 +123,30 @@ cvr:
         Va: 50
         Vb: 50
         Vc: 50
-        Apparent: 100
-        Reactive: 100
-        W: 100
+        Apparent: 0
+        Reactive: 0
+        W: 0
     load3:
         name: load3
         mrid: 5c6a381b-ea49-4c12-84f5-93d5defa3394
-        Ia: 10
-        Ib: 11
-        Ic: 12
-        Va: 50
-        Vb: 50
-        Vc: 50
-        Apparent: 100
-        Reactive: 100
-        W: 100
+        Ia: 0
+        Ib: 0
+        Ic: 0
+        Va: 0
+        Vb: 0
+        Vc: 0
+        Apparent: 0
+        Reactive: 0
+        W: 0
     load4:
         name: load4
         mrid: 5c6a381b-ea49-4c12-84f5-93d5defa3394
-        Ia: 10
-        Ib: 11
-        Ic: 12
-        Va: 50
-        Vb: 50
-        Vc: 50
-        Apparent: 100
-        Reactive: 100
-        W: 100
+        Ia: 0
+        Ib: 0
+        Ic: 0
+        Va: 0
+        Vb: 0
+        Vc: 0
+        Apparent: 0
+        Reactive: 0
+        W: 0
